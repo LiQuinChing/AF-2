@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const LoginPage = () => {
-  const [form, setForm] = useState({ username: "", password: "" });
+const SignUpPage = () => {
+  const [form, setForm] = useState({ username: "", password: "", confirm: "" });
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,11 +14,11 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const success = login(form.username, form.password);
-    if (success) {
-      navigate("/favorites");
+    if (form.password !== form.confirm) {
+      setError("Passwords do not match.");
     } else {
-      setError("Invalid credentials");
+      register(form.username, form.password);
+      navigate("/login");
     }
   };
 
@@ -26,9 +26,9 @@ const LoginPage = () => {
     <div className="flex justify-center items-center h-screen">
       <form
         onSubmit={handleSubmit}
-        className="p-6 bg-white rounded shadow w-full max-w-sm"
+        className="bg-white p-6 shadow rounded w-full max-w-sm"
       >
-        <h2 className="text-xl font-semibold mb-4">Login</h2>
+        <h2 className="text-xl font-bold mb-4">Sign Up</h2>
         {error && <p className="text-red-500">{error}</p>}
         <input
           name="username"
@@ -36,7 +36,7 @@ const LoginPage = () => {
           placeholder="Username"
           value={form.username}
           onChange={handleChange}
-          className="border p-2 w-full mb-3 rounded"
+          className="w-full border p-2 mb-3 rounded"
           required
         />
         <input
@@ -45,24 +45,27 @@ const LoginPage = () => {
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
-          className="border p-2 w-full mb-3 rounded"
+          className="w-full border p-2 mb-3 rounded"
+          required
+        />
+        <input
+          name="confirm"
+          type="password"
+          placeholder="Confirm Password"
+          value={form.confirm}
+          onChange={handleChange}
+          className="w-full border p-2 mb-3 rounded"
           required
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 w-full rounded"
+          className="bg-green-600 text-white w-full py-2 rounded hover:bg-green-700"
         >
-          Login
+          Sign Up
         </button>
-        <p className="mt-3 text-sm">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-600 underline">
-            Sign Up
-          </Link>
-        </p>
       </form>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

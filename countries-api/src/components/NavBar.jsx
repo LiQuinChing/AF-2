@@ -34,12 +34,20 @@ const Navbar = () => {
             </button>
           </>
         ) : (
-          <Link
-            to="/login"
-            className="bg-white text-blue-800 font-medium px-4 py-2 rounded hover:bg-gray-100"
-          >
-            Login
-          </Link>
+          <>
+            <Link
+              to="/login"
+              className="bg-white text-blue-800 font-medium px-4 py-2 rounded hover:bg-gray-100"
+            >
+              Login
+            </Link>
+            <Link
+              to="/signup"
+              className="bg-white text-blue-800 font-medium px-4 py-2 rounded hover:bg-gray-100"
+            >
+              Sign Up
+            </Link>
+          </>
         )}
       </div>
     </nav>
