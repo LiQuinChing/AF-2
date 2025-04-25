@@ -10,18 +10,25 @@ import RegionFilter from "../components/RegionFilter";
 
 const Home = () => {
   const [countries, setCountries] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getAllCountries().then(setCountries);
   }, []);
 
-  const handleSearch = (name) => {
-    if (name) {
-      getCountryByName(name)
-        .then(setCountries)
-        .catch(() => setCountries([]));
-    } else {
+  const handleSearch = async (name) => {
+    if (!name) {
       getAllCountries().then(setCountries);
+      setError(null);
+      return;
+    }
+    try {
+      const result = await getCountryByName(name);
+      setCountries(result);
+      setError(null);
+    } catch (err) {
+      setCountries([]);
+      setError("Country not found.");
     }
   };
 
@@ -38,9 +45,15 @@ const Home = () => {
       <SearchBar onSearch={handleSearch} />
       <RegionFilter onChange={handleRegionChange} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-        {countries.map((country) => (
-          <CountryCard key={country.cca3} country={country} />
-        ))}
+        {error ? (
+          <p className="col-span-full text-center text-red-600 font-semibold text-lg">
+            {error}
+          </p>
+        ) : (
+          countries.map((country) => (
+            <CountryCard key={country.cca3} country={country} />
+          ))
+        )}
       </div>
     </div>
   );

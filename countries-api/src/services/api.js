@@ -7,11 +7,17 @@ export const getAllCountries = async () => {
 
 export const getCountryByName = async (name) => {
     const res = await fetch(`${BASE_URL}/name/${name}`);
+    if (!res.ok) {
+        throw new Error("Country not found");
+    }
     return await res.json();
 };
 
 export const getCountriesByRegion = async (region) => {
     const res = await fetch(`${BASE_URL}/region/${region}`);
+    if (!res.ok) {
+        throw new Error("Region not found");
+    }
     return await res.json();
 };
 
