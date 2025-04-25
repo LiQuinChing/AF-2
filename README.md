@@ -24,3 +24,5 @@ Usage Instructions
 Challenge faced
 Authentication Without Backend
 Since backend integration was out of scope, user sign-up/login was implemented using localStorage, simulating a basic authentication flow while maintaining security considerations.
+Storing favourites without backend
+Favourites are stored using localStorage since backend integration was out of scope.

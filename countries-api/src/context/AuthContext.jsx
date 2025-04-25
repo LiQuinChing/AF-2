@@ -13,30 +13,38 @@ export const AuthProvider = ({ children }) => {
     if (savedUser) setUser(JSON.parse(savedUser));
   }, []);
 
+  const register = (username, password) => {
+    const users = JSON.parse(localStorage.getItem("registered_users")) || [];
+
+    // Check if username already exists
+    const exists = users.some((u) => u.username === username);
+    if (exists) {
+      throw new Error("Username already exists");
+    }
+
+    users.push({ username, password });
+    localStorage.setItem("registered_users", JSON.stringify(users));
+  };
+
   const login = (username, password) => {
-    const savedUser = JSON.parse(localStorage.getItem("registered_user"));
-    if (
-      savedUser &&
-      savedUser.username === username &&
-      savedUser.password === password
-    ) {
-      localStorage.setItem(LOCAL_KEY, JSON.stringify({ name: username }));
-      setUser({ name: username });
+    const users = JSON.parse(localStorage.getItem("registered_users")) || [];
+    const foundUser = users.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (foundUser) {
+      const sessionUser = { name: foundUser.username };
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(sessionUser));
+      setUser(sessionUser);
       return true;
     }
+
     return false;
   };
 
   const logout = () => {
     localStorage.removeItem(LOCAL_KEY);
     setUser(null);
-  };
-
-  const register = (username, password) => {
-    localStorage.setItem(
-      "registered_user",
-      JSON.stringify({ username, password })
-    );
   };
 
   return (
